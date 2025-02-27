@@ -16,6 +16,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { AuthGuard } from './guards/auth.guard';
 
+@UseGuards(AuthGuard)
+@Roles(['admin']) // to use this route, the user must have the role of admin
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -27,29 +29,51 @@ export class UserController {
    * @returns new user
    */
   @Post()
-  @UseGuards(AuthGuard)
-  @Roles(['admin']) // to use this route, the user must have the role of admin
   create(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
+  /**
+   * @docs admin could get all users
+   * @route GET api/v1/user
+   * @access private admin
+   * @returns all users
+   */
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
+  /**
+   * @docs admin could get single user
+   * @route GET api/v1/user/:id
+   * @access private admin
+   * @returns single user
+   */
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
+  /**
+   * @docs admin could update single user
+   * @route PATCH api/v1/user/:id
+   * @access private admin
+   * @returns updated single user
+   */
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
+  /**
+   * @docs admin could delete single user
+   * @route DELETE api/v1/user/:id
+   * @access private admin
+   * @returns deleted single user
+   */
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
