@@ -21,8 +21,57 @@ export class UserService {
     return await this.userModel.create({ ...createUserDto, password });
   }
 
-  findAll(): Promise<User[]> {
-    return this.userModel.find().select('-password -__v -createdAt -updatedAt');
+  async findAll(query: any): Promise<{
+    data: User[];
+    status: number;
+    length: number;
+    message: string;
+  }> {
+    const {
+      limit = 1000000,
+      skip = 0,
+      sort = 'asc',
+      page,
+      name,
+      email,
+      role,
+    } = query;
+
+    if (
+      Number.isNaN(Number(+limit)) ||
+      Number.isNaN(Number(+page)) ||
+      Number.isNaN(Number(+skip))
+    ) {
+      throw new HttpException(
+        'Page and limit and skip must be a number',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!['desc', 'asc'].includes(sort)) {
+      throw new HttpException(
+        'sort must be asc or desc',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const users = await this.userModel
+      .find()
+      .skip(skip)
+      .limit(limit)
+      // .or([{ name }, { email }, { role }]) // or => search by the full keyword (you should send the full word)
+      .where('name', new RegExp(name, 'i')) // regex search by any part of the word
+      .where('email', new RegExp(email, 'i')) // you should to avoid using where because it's bad for performance
+      .where('role', new RegExp(role, 'i'))
+      .sort({ name: sort })
+      .select('-password -__v -createdAt -updatedAt');
+
+    return {
+      status: 200,
+      data: users,
+      length: users.length,
+      message: 'All users',
+    };
   }
 
   async findOne(id: string): Promise<User> {
