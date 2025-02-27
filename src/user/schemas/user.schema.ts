@@ -14,7 +14,7 @@ export class User {
   })
   name: string; // this type is for ts type defintion
 
-  @Prop({ required: true, type: String, unique: true })
+  @Prop({ unique: true, required: true, type: String })
   email: string;
 
   @Prop({

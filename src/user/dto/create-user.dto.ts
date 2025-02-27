@@ -44,14 +44,17 @@ export class CreateUserDto {
   @IsEnum(Object.values(Enums.Role), {
     message: 'Role must be either user or admin',
   })
+  @IsOptional()
   role: string;
 
   //* Avatar
   @IsString({ message: 'Avatar must be a string' })
   @IsUrl({}, { message: 'Avatar must be a valid url' })
+  @IsOptional()
   avatar: string;
 
   //* Phone number
+  @IsOptional()
   @IsString({ message: 'Phone number must be a string' })
   @IsPhoneNumber('EG', {
     message: 'Phone number must be a valid Egyptian phone number',
@@ -59,20 +62,24 @@ export class CreateUserDto {
   phoneNumber: string;
 
   //* Address
+  @IsOptional()
   @IsString({ message: 'Address must be a string' })
   address: string;
 
   //* Active
+  @IsOptional()
   @IsBoolean({ message: 'Active must be a boolean' })
   active: boolean;
 
   //* Verification code
+  @IsOptional()
   @IsString({ message: 'Verification code must be a string' })
   @Length(6, 6, { message: 'Verification code must be at most 6 chars' })
   @IsOptional()
   verificationCode: string;
 
   //* Gender
+  @IsOptional()
   @IsString({ message: 'Gender must be a string' })
   @IsEnum(Object.values(Enums.Gender), {
     message: 'Gender must be either male or female',
@@ -80,6 +87,7 @@ export class CreateUserDto {
   gender: string;
 
   //* Age
+  @IsOptional()
   @IsNumber({}, { message: 'Age must be a number' })
   @Min(18, { message: 'Age must be at least 18' })
   @Max(100, { message: 'Age must be at most 100' })

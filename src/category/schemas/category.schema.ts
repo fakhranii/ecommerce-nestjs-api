@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type CategoeyDocument = HydratedDocument<Categoey>;
+export type CategoryDocument = HydratedDocument<Category>;
 
 @Schema({ timestamps: true })
-export class Categoey {
+export class Category {
   @Prop({
     required: true,
     type: String,
@@ -17,4 +17,4 @@ export class Categoey {
   image: string;
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Categoey);
+export const CategorySchema = SchemaFactory.createForClass(Category);
