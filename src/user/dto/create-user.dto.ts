@@ -8,10 +8,8 @@ import {
   IsPhoneNumber,
   IsString,
   IsUrl,
-  isURL,
   Length,
   Max,
-  MaxLength,
   Min,
   MinLength,
 } from 'class-validator';
