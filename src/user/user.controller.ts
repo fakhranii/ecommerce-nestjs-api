@@ -78,3 +78,28 @@ export class UserController {
     return this.userService.remove(id);
   }
 }
+
+@Roles(['user', 'admin'])
+@UseGuards(AuthGuard)
+@Controller('user-me')
+export class UserMeController {
+  constructor(private readonly userService: UserService) {}
+  @Get()
+  getMe(@Req() req) {
+    return this.userService.getMe(req.user);
+  }
+
+  @Patch()
+  updateMe(
+    @Req() req,
+    @Body(new ValidationPipe({ forbidNonWhitelisted: true }))
+    updateUserDto: UpdateUserDto,
+  ) {
+    return this.userService.updateMe(req.user.id, updateUserDto);
+  }
+
+  @Delete()
+  deleteMe(@Req() req) {
+    return this.userService.deleteMe(req.user);
+  }
+}
